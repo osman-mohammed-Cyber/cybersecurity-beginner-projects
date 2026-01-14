@@ -5,6 +5,7 @@
 # and checks basic network reachability using ping.
 # It is intended for learning purposes only.
 
+
 import socket
 import subprocess
 import platform
@@ -77,3 +78,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
