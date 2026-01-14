@@ -1,9 +1,27 @@
-# Beginner Cybersecurity Learning Project
+# Python Port Scanner
 
-This repository contains an educational Python project created to understand basic cybersecurity and networking concepts.
+## Overview
+A beginner-level Python tool to check whether certain ports on a host are open or closed.
 
-The current implementation focuses on learning how network services communicate through ports using simple socket programming.
+## What This Project Does
+- Checks one or multiple ports on a host
+- Uses Python sockets to detect open ports
+- Shows results in a simple format
 
-## Disclaimer
-This project is for educational purposes only.
-Test only on systems you own or have permission to access.
+## Concepts Learned
+- TCP/IP basics
+- Socket programming
+- Loops and conditionals
+
+## Educational Purpose
+Created for learning and understanding basic network port scanning safely.
+
+## How to Run
+1. Install Python 3
+2. Run: `python port_scanner.py`
+3. Enter host and port(s)
+
+## Example Output
+Target: 192.168.1.1
+Port 22: Open
+Port 80: Closed
