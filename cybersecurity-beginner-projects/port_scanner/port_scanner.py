@@ -1,75 +1,73 @@
 import socket
-import time
+import threading
+from queue import Queue
 
-# Educational Port Scanner
+# Ask the user for target information
+target = input("Enter target IP or hostname: ")
+start_port = int(input("Start port: "))
+end_port = int(input("End port: "))
 
+# Set a default timeout for socket connections (in seconds)
+# This prevents the scanner from waiting too long on unresponsive ports
+socket.setdefaulttimeout(0.3)
 
-# Ask the user to enter the target host (IP address or domain name)
-target_host = input("Enter target IP address or hostname: ")
+# Queue to store ports that need to be scanned
+port_queue = Queue()
 
-# Ask the user to define the port range
-start_port = int(input("Enter start port: "))
-end_port = int(input("Enter end port: "))
-
-# Timeout value in seconds to avoid waiting too long on unresponsive ports
-TIMEOUT = 3
-
-# List to store open ports for summary
+# List to store discovered open ports
 open_ports = []
 
-print("\nStarting scan on:", target_host)
-print(f"Scanning ports from {start_port} to {end_port}")
-print("-" * 40)
 
-# Record the time when the scan starts
-scan_start_time = time.time()
+def scan_port():
+    """
+    Worker function that scans ports from the queue.
+    Each thread runs this function to scan multiple ports concurrently.
+    """
+    while not port_queue.empty():
+        port = port_queue.get()
+        try:
+            # Create a TCP socket
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-# Loop through the specified port range
+            # Attempt to connect to the target on the given port
+            result = s.connect_ex((target, port))
+
+            # If connection is successful, the port is open
+            if result == 0:
+                open_ports.append(port)
+
+            # Close the socket after each attempt
+            s.close()
+
+        except:
+            # Ignore errors to keep the scan running smoothly
+            pass
+
+        # Mark the current task as done
+        port_queue.task_done()
+
+
+# Add all ports in the selected range to the queue
 for port in range(start_port, end_port + 1):
-    try:
-        # Create a new TCP socket
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    port_queue.put(port)
 
-        # Set timeout to control how long we wait for a response
-        sock.settimeout(TIMEOUT)
+# Create and start multiple threads for faster scanning
+threads = []
+for _ in range(50):  # Number of threads (balanced for speed and safety)
+    t = threading.Thread(target=scan_port)
+    threads.append(t)
+    t.start()
 
-        # Attempt to connect to the target host and port
-        result = sock.connect_ex((target_host, port))
+# Wait for all threads to finish
+for t in threads:
+    t.join()
 
-        # If result is 0, the port is open
-        if result == 0:
-            print(f"[OPEN] Port {port}")
-            open_ports.append(port)
-
-        # Close the socket after each attempt
-        sock.close()
-
-    except socket.gaierror:
-        print("Hostname could not be resolved.")
-        break
-
-    except socket.error:
-        print("Connection error occurred.")
-        break
-
-# Record the time when the scan ends
-scan_end_time = time.time()
-
-# Calculate total scan duration
-total_time = scan_end_time - scan_start_time
-
+# Display scan results
 print("\nScan completed.")
-print("-" * 40)
-print(f"Total time taken: {total_time:.2f} seconds")
 
-# Display summary of open ports
 if open_ports:
     print("Open ports found:")
-    for port in open_ports:
+    for port in sorted(open_ports):
         print(f"- Port {port}")
 else:
-    print("No open ports were detected.")
-
-print("\nNote:")
-print("This tool is intended for educational use only.")
-print("Scan only systems you own or have permission to test.")
+    print("No open ports found.")
