@@ -2,6 +2,7 @@
 # Educational Password Strength Checker
 # ======================================
 
+
 import string
 
 # Common weak passwords list (educational example)
@@ -70,3 +71,4 @@ else:
     print("\nGood job! Your password meets basic security requirements.")
 
 print("\nNote: This tool is for educational purposes only.")
+
