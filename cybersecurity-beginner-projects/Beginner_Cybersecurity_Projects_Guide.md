@@ -27,35 +27,6 @@ Created for learning and understanding basic network port scanning safely.
 3. Enter host and port(s)
 
 ### Example Output
-# Beginner Cybersecurity Projects Guide
-
-## Overview
-This guide summarizes three beginner-level Python projects designed to teach fundamental cybersecurity and networking concepts.  
-The projects focus on practical learning in a safe and educational way.
-
----
-
-## 1. Python Port Scanner
-
-### What It Does
-- Checks one or multiple ports on a host
-- Uses Python sockets to detect open ports
-- Displays results clearly
-
-### Concepts Learned
-- TCP/IP basics
-- Socket programming
-- Loops and conditionals
-
-### Educational Purpose
-Created for learning and understanding basic network port scanning safely.
-
-### How to Run
-1. Install Python 3
-2. Run: `python port_scanner.py`
-3. Enter host and port(s)
-
-### Example Output
 Target: 192.168.1.1
 Port 22: Open
 Port 80: Closed
@@ -125,3 +96,4 @@ These projects are **educational tools** that provide hands-on experience in:
 - Python programming for cybersecurity
 
 They are designed for beginners to explore cybersecurity concepts safely and effectively.
+
